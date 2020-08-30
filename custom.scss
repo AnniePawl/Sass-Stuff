@@ -1,0 +1,13 @@
+// Import Bootstrap's source Sass files.
+// Avoid modifying Bootstrap's core files by creating your own stylesheet that importrs Bootstrap so you can modify and extend it.
+
+// Option A: Include all of Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+// Alternatively, you can include specific parts of boostrap...
+
+$font: 'Alata', sans-serif;
+
+h1 {
+	font-family: $font;
+	color: darkslategray;
+}

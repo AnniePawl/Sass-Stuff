@@ -4,21 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="custom.css">
   <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <!-- Responsive Meta Tag (mobile-first) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
   <!-- Main Div -->
   <div class="container-fluid">
 
- 
   <h1>Anna's Sass Cheatsheet & Workspace </h1>
+
+  <!-- Bootstrap Stuff -->
+  <h3>Bootstrap and Sass</h3>
+  <p>Bootstrap includes source Sass files that take advantage of variables, maps, mixins, etc. </p>
+  <h4>Custom Sass</h4>
+  <p>Avoid modifying bootstrap's core files. For Sass, that means creating your own stylesheet that imports Bootstrap so you can modify and extend it.</p>
+
+  <pre>
+  your-project/
+      ├── scss
+      │   └── custom.scss
+      └── bootstrap/
+          ├── js
+          └── scss
+    </pre>
+  <p>Import Bootstrap's source files in custom.scss. You can either incluade all of Bootstrap, or specific parts.</p>
+ 
+  <code>
+    @import "../node_modules/bootstrap/scss/bootstrap";
+  </code>
+
+
 
   <!-- Variables -->
   <div>
     <h2>Variables</h2>
     <p>In Sass, variables start with $ followed by variable name</p>
+    
+  
 
     <pre>
       <code>
@@ -32,11 +57,177 @@
       </code>
       
     </pre>
-    
 
+    <!-- Nesting -->
+    <h3>Nesting</h3>
+    <p>Sass allows nesting of CSS rules, which helps organize a stylesheet</p>
+    <pre>
+      <code>
+        nav {
+          background-color: red;
+        
+          ul {
+            list-style: none;
+        
+            li {
+              display: inline-block;
+            }
+          }
+        }
+
+      </code>
+    </pre>
+
+    <!-- Mixins -->
+    <h3>Mixins</h3>
+    <p>A mixin in a group of CSS declarations that can be reused throughout a style sheet. Definition starts with "@mixin" followed by custom name.</p>
+    <pre>
+      <code>
+        @mixin box-shadow($x, $y, $blur, $c){ 
+          -webkit-box-shadow: $x $y $blur $c;
+          -moz-box-shadow: $x $y $blur $c;
+          -ms-box-shadow: $x $y $blur $c;
+          box-shadow: $x $y $blur $c;
+        }
+      </code>
+    </pre>
+    <p>Use "@include" directive to use mixin in styles</p>
+
+
+    <!-- If/ Else  -->
+    <h3>If / Else Logic</h3>
+    <p>"@if" directive can be used to test conditions</p>
+    <pre>
+      <code>
+        @mixin text-effect($val) {
+          @if $val == danger {
+            color: red;
+          }
+          @else if $val == alert {
+            color: yellow;
+          }
+          @else if $val == success {
+            color: green;
+          }
+          @else {
+            color: black;
+          }
+        }
+
+      </code>
+    </pre>
+
+    <!-- For Loop  -->
+    <h3>For Loop</h3>
+    <p>The @for directive adds styles in a loop. It can be used in two ways:</p>
+    <ul>
+      <li>
+        "start through end": includes last number</li>
+      <li>"start to end": excludes last number </li>
+    </ul>
+ 
+    <pre>
+      <code>
+        @for $i from 1 through 12 {
+          .col-#{$i} { width: 100%/12 * $i; }
+        }
+
+      </code>
+    </pre>
+
+    <p>The #{$i} syntax above will combine a variable (i) with text to make a string. When Sass file is converted to CSS, it looks like this:</p>
+
+    <pre>
+      <code>
+        .col-1 {
+          width: 8.33333%;
+        }
+        
+        .col-2 {
+          width: 16.66667%;
+        }
+        
+        ...
+        
+        .col-12 {
+          width: 100%;
+        }
+
+      </code>
+    </pre>
+
+    <!-- Each -->
+    <h3>@each to Map Over List Items</h3>
+    <p>@each directive loop over each item in a list. On each iterations, variable gets assigned to current value from list or map</p>
+    <pre>
+      <code>
+        @each $color in blue, red, green {
+          .#{$color}-text {color: $color;}
+        }
+
+      </code>
+    </pre>
+
+    <p>Map Sytax</p>
+    <p>$key car is needed to reference keys in map. Otherwise, compiled CSS would have color1, color2.. in it</p>
+    <pre>
+      <code>
+        $colors: (color1: blue, color2: red, color3: green);
+
+@each $key, $color in $colors {
+  .#{$color}-text {color: $color;}
+}
+
+      </code>
+    </pre>
+    <p>Code above is converted to this...</p>
+    <pre>
+      <code>
+        .blue-text {
+          color: blue;
+        }
+        
+        .red-text {
+          color: red;
+        }
+        
+        .green-text {
+          color: green;
+        }
+
+      </code>
+    </pre>
+
+
+    <!-- While  -->
+    <h3>@while directive</h3>
+    <p>Apply a style until condition is met with @while. </p>
+    <pre>
+      <code>
+        $x: 1;
+        @while $x < 13 {
+          .col-#{$x} { width: 100%/12 * $x;}
+          $x: $x + 1;
+        }
+      </code>
+    </pre>
+
+
+    <!-- Partials -->
+    <h3>Partials</h3>
+    <p>Partials are seperate files that hold bits of CSS code. They are imported adn used in other Sass files. Partials start with an underscore char, which tells Sass it's a small bit of css and not to convery it into a CSS file.</p>
+    
+    <!-- Extend -->
+    <h3>Extend</h3>
+    <p></p>
 
   </div>
 </div>
+
+<!-- Bootstrap Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   
 </body>
 </html>
